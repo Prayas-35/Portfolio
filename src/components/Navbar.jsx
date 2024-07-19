@@ -5,10 +5,9 @@ import ThemeToggle from './ThemeToggle';
 import { FaGithub } from "react-icons/fa";
 
 const navigation = [
-    { name: 'Dashboard', href: '#', current: true },
-    { name: 'Team', href: '#', current: false },
+    { name: 'About', href: '#', current: true },
     { name: 'Projects', href: '#', current: false },
-    { name: 'Calendar', href: '#', current: false },
+    { name: 'Skills', href: '#', current: false },
 ];
 
 function classNames(...classes) {
