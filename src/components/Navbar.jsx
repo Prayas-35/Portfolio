@@ -6,7 +6,7 @@ import { FaGithub } from "react-icons/fa";
 
 const navigation = [
     { name: 'About', href: '#', current: true },
-    { name: 'Projects', href: '#', current: false },
+    { name: 'Projects', href: '#projects', current: false },
     { name: 'Skills', href: '#', current: false },
 ];
 
@@ -16,7 +16,7 @@ function classNames(...classes) {
 
 export default function Navbar() {
     return (
-        <div>
+        <div className='bg-background'>
             <Disclosure as="nav" className="bg-background">
                 <div className="px-2 sm:px-6 lg:px-8 py-5">
                     <div className="relative flex h-16 items-center justify-between">
