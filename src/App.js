@@ -20,10 +20,13 @@ export default function App() {
             Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maiores architecto error totam omnis id voluptate, numquam temporibus, magnam, doloribus ut enim. Sit doloremque repellendus maxime tenetur totam amet harum saepe?
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem cum facilis facere eum quidem corporis voluptatum veniam voluptates maxime minima porro aspernatur neque, recusandae vel saepe commodi accusantium inventore nam!
           </section>
-          <section id='projects' ref={ref2} className='h-screen'>
-            <h1 className={`text-foreground ${inView2 ? 'animate__animated animate__fadeInLeft' : ''}`}>
+          <section id='projects' ref={ref2} className={`h-screen ${inView2 ? 'animate__animated animate__fadeInLeft' : ''} scroll-m-28`}>
+            <h1 className='text-foreground'>
               Hello world2!
             </h1>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur, ullam optio reiciendis eveniet a rem ipsam, error tempora voluptate in incidunt. Distinctio quae maiores perferendis earum incidunt reprehenderit! Dolorem, quasi.
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maiores architecto error totam omnis id voluptate, numquam temporibus, magnam, doloribus ut enim. Sit doloremque repellendus maxime tenetur totam amet harum saepe?
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem cum facilis facere eum quidem corporis voluptatum veniam voluptates maxime minima porro aspernatur neque, recusandae vel saepe commodi accusantium inventore nam!
           </section>
         </main>
       </div>
