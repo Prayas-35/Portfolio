@@ -22,6 +22,10 @@ export interface PillNavProps {
   pillTextColor?: string;
   onMobileMenuClick?: () => void;
   initialLoadAnimation?: boolean;
+  /** Background of the floating navbar and menus (glass). */
+  containerBg?: string;
+  /** Accent used for hover ripple circle and active dot. */
+  accentColor?: string;
 }
 
 const PillNav: React.FC<PillNavProps> = ({
@@ -36,7 +40,9 @@ const PillNav: React.FC<PillNavProps> = ({
   hoveredPillTextColor = '#060010',
   pillTextColor,
   onMobileMenuClick,
-  initialLoadAnimation = true
+  initialLoadAnimation = true,
+  containerBg,
+  accentColor
 }) => {
   const resolvedPillTextColor = pillTextColor ?? baseColor;
   const logoSrc = typeof logo === 'string' ? logo : logo.src;
@@ -163,18 +169,18 @@ const PillNav: React.FC<PillNavProps> = ({
     });
   };
 
-  const handleLogoEnter = () => {
-    const img = logoImgRef.current;
-    if (!img) return;
-    logoTweenRef.current?.kill();
-    gsap.set(img, { rotate: 0 });
-    logoTweenRef.current = gsap.to(img, {
-      rotate: 360,
-      duration: 0.2,
-      ease,
-      overwrite: 'auto'
-    });
-  };
+  // const handleLogoEnter = () => {
+  //   const img = logoImgRef.current;
+  //   if (!img) return;
+  //   logoTweenRef.current?.kill();
+  //   gsap.set(img, { rotate: 0 });
+  //   logoTweenRef.current = gsap.to(img, {
+  //     rotate: 360,
+  //     duration: 0.2,
+  //     ease,
+  //     overwrite: 'auto'
+  //   });
+  // };
 
   const toggleMobileMenu = () => {
     const newState = !isMobileMenuOpen;
@@ -238,7 +244,8 @@ const PillNav: React.FC<PillNavProps> = ({
   const isRouterLink = (href?: string) => href && !isExternalLink(href);
 
   const cssVars = {
-    ['--base']: baseColor,
+    ['--container']: containerBg ?? baseColor,
+    ['--accent']: accentColor ?? baseColor,
     ['--pill-bg']: pillColor,
     ['--hover-text']: hoveredPillTextColor,
     ['--pill-text']: resolvedPillTextColor,
@@ -249,17 +256,17 @@ const PillNav: React.FC<PillNavProps> = ({
   } as React.CSSProperties;
 
   return (
-    <div className="absolute top-[1em] z-[1000] w-full left-0 md:w-auto md:left-auto">
+  <div className="fixed top-4 left-1/2 -translate-x-1/2 z-1000 w-max max-w-[92vw]">
       <nav
-        className={`w-full md:w-max flex items-center justify-between md:justify-start box-border px-4 md:px-0 ${className}`}
+        className={`w-full md:w-max flex items-center justify-between md:justify-start box-border px-4 md:px-0 rounded-full backdrop-blur-md shadow-lg ring-1 ring-white/10 ${className}`}
         aria-label="Primary"
         style={cssVars}
       >
         {isRouterLink(items?.[0]?.href) ? (
           <Link
-            href={items[0].href}
+            href={""}
             aria-label="Home"
-            onMouseEnter={handleLogoEnter}
+            // onMouseEnter={handleLogoEnter}
             role="menuitem"
             ref={el => {
               logoRef.current = el;
@@ -268,16 +275,16 @@ const PillNav: React.FC<PillNavProps> = ({
             style={{
               width: 'var(--nav-h)',
               height: 'var(--nav-h)',
-              background: 'var(--base, #000)'
+              background: 'var(--container, #000)'
             }}
           >
             <img src={logoSrc} alt={logoAlt} ref={logoImgRef} className="w-full h-full object-cover block" />
           </Link>
         ) : (
           <a
-            href={items?.[0]?.href || '#'}
+            href={""}
             aria-label="Home"
-            onMouseEnter={handleLogoEnter}
+            // onMouseEnter={handleLogoEnter}
             ref={el => {
               logoRef.current = el;
             }}
@@ -285,7 +292,7 @@ const PillNav: React.FC<PillNavProps> = ({
             style={{
               width: 'var(--nav-h)',
               height: 'var(--nav-h)',
-              background: 'var(--base, #000)'
+              background: 'var(--container, #000)'
             }}
           >
             <img src={logoSrc} alt={logoAlt} ref={logoImgRef} className="w-full h-full object-cover block" />
@@ -297,7 +304,7 @@ const PillNav: React.FC<PillNavProps> = ({
           className="relative items-center rounded-full hidden md:flex ml-2"
           style={{
             height: 'var(--nav-h)',
-            background: 'var(--base, #000)'
+            background: 'var(--container, #000)'
           }}
         >
           <ul
@@ -318,9 +325,9 @@ const PillNav: React.FC<PillNavProps> = ({
               const PillContent = (
                 <>
                   <span
-                    className="hover-circle absolute left-1/2 bottom-0 rounded-full z-[1] block pointer-events-none"
+                    className="hover-circle absolute left-1/2 bottom-0 rounded-full z-1 block pointer-events-none"
                     style={{
-                      background: 'var(--base, #000)',
+                      background: 'var(--accent, #000)',
                       willChange: 'transform'
                     }}
                     aria-hidden="true"
@@ -328,15 +335,15 @@ const PillNav: React.FC<PillNavProps> = ({
                       circleRefs.current[i] = el;
                     }}
                   />
-                  <span className="label-stack relative inline-block leading-[1] z-[2]">
+                  <span className="label-stack relative inline-block leading-none z-2">
                     <span
-                      className="pill-label relative z-[2] inline-block leading-[1]"
+                      className="pill-label relative z-2 inline-block leading-none"
                       style={{ willChange: 'transform' }}
                     >
                       {item.label}
                     </span>
                     <span
-                      className="pill-label-hover absolute left-0 top-0 z-[3] inline-block"
+                      className="pill-label-hover absolute left-0 top-0 z-3 inline-block"
                       style={{
                         color: 'var(--hover-text, #fff)',
                         willChange: 'transform, opacity'
@@ -348,8 +355,8 @@ const PillNav: React.FC<PillNavProps> = ({
                   </span>
                   {isActive && (
                     <span
-                      className="absolute left-1/2 -bottom-[6px] -translate-x-1/2 w-3 h-3 rounded-full z-[4]"
-                      style={{ background: 'var(--base, #000)' }}
+                      className="absolute left-1/2 -bottom-1.5 -translate-x-1/2 w-3 h-3 rounded-full z-4"
+                      style={{ background: 'var(--accent, #000)' }}
                       aria-hidden="true"
                     />
                   )}
@@ -405,11 +412,11 @@ const PillNav: React.FC<PillNavProps> = ({
           }}
         >
           <span
-            className="hamburger-line w-4 h-0.5 rounded origin-center transition-all duration-[10ms] ease-[cubic-bezier(0.25,0.1,0.25,1)]"
+            className="hamburger-line w-4 h-0.5 rounded origin-center transition-all duration-10 ease-[cubic-bezier(0.25,0.1,0.25,1)]"
             style={{ background: 'var(--pill-bg, #fff)' }}
           />
           <span
-            className="hamburger-line w-4 h-0.5 rounded origin-center transition-all duration-[10ms] ease-[cubic-bezier(0.25,0.1,0.25,1)]"
+            className="hamburger-line w-4 h-0.5 rounded origin-center transition-all duration-10 ease-[cubic-bezier(0.25,0.1,0.25,1)]"
             style={{ background: 'var(--pill-bg, #fff)' }}
           />
         </button>
@@ -417,10 +424,10 @@ const PillNav: React.FC<PillNavProps> = ({
 
       <div
         ref={mobileMenuRef}
-        className="md:hidden absolute top-[3em] left-4 right-4 rounded-[27px] shadow-[0_8px_32px_rgba(0,0,0,0.12)] z-[998] origin-top"
+        className="md:hidden absolute top-[3em] left-4 right-4 rounded-[27px] shadow-[0_8px_32px_rgba(0,0,0,0.12)] z-998 origin-top"
         style={{
           ...cssVars,
-          background: 'var(--base, #f0f0f0)'
+          background: 'var(--container, #0a0a0a)'
         }}
       >
         <ul className="list-none m-0 p-[3px] flex flex-col gap-[3px]">
