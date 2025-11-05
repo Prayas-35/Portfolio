@@ -63,7 +63,7 @@ const HomeSection: React.FC = () => {
     return (
         <section
             id="home"
-            className="relative min-h-screen w-full overflow-hidden text-white"
+            className="relative min-h-screen w-full overflow-hidden"
             aria-label="Home"
         >
             {/* Background PixelBlast */}

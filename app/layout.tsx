@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Sora } from "next/font/google";
 import Wrapper from "./wrapper";
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,11 +32,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${sora.variable} antialiased bg-black`}
+        className={`${geistSans.variable} ${geistMono.variable} ${sora.variable} antialiased bg-black text-white`}
       >
         <Wrapper>
           {children}
         </Wrapper>
+        <Toaster position="top-right" richColors closeButton />
       </body>
     </html>
   );
