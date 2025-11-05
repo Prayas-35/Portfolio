@@ -29,7 +29,7 @@ const AchievementsSection: React.FC = () => {
         <div className="mx-auto max-w-9/12 px-6">
           <h2 className="mb-3 text-3xl font-semibold md:text-4xl">Achievements</h2>
           <p className="mb-10 max-w-3xl text-sm text-muted-foreground md:text-base">
-            A snapshot of awards, hackathon results, and recognitions. I’ll wire this to an API later.
+            A snapshot of awards, hackathon results, and recognitions.
           </p>
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
