@@ -745,15 +745,23 @@ const BentoCard = ({ item }: { item: BentoItem }) => {
 export default function BentoGrid() {
     const [data, setData] = useState<BentoItem[]>(bentoItems);
 
-    async function fetchCurrentProject() {
-        try {
-            const res = await fetch("/api/currentProject");
-            const response = await res.json();
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                // Fetch both APIs in parallel
+                const [projectRes, findMeRes] = await Promise.all([
+                    fetch("/api/currentProject"),
+                    fetch("/api/findMe")
+                ]);
 
-            if (response.success && response.data) {
-                const project = response.data;
+                const projectData = await projectRes.json();
+                const findMeData = await findMeRes.json();
+
+                // Update all items at once
                 const updatedItems = bentoItems.map((item) => {
-                    if (item.id === "current-project") {
+                    // Update current project
+                    if (item.id === "current-project" && projectData.success && projectData.data) {
+                        const project = projectData.data;
                         return {
                             ...item,
                             title: `Current project: ${project.title}`,
@@ -761,50 +769,41 @@ export default function BentoGrid() {
                             spotlightItems: project.points,
                         };
                     }
+
+                    // Update find me event
+                    if (item.id === "next-at" && findMeData.success && findMeData.data && findMeData.data.length > 0) {
+                        // Get the most recent future event or latest past event
+                        const futureEvents = findMeData.data.filter((e: any) => e.type === 'future');
+                        const event = futureEvents.length > 0 ? futureEvents[0] : findMeData.data[0];
+
+                        const eventDate = new Date(event.date);
+                        const formattedDate = eventDate.toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                        });
+
+                        return {
+                            ...item,
+                            title: event.type === 'past' ? 'I was last at' : 'Find me next at',
+                            description: event.event,
+                            imageSrc: event.imageUrl,
+                            subtitle: `${formattedDate} • ${event.location}`,
+                            href: event.eventUrl,
+                        };
+                    }
+
                     return item;
                 });
+
                 setData(updatedItems);
+            } catch (error) {
+                console.error("Error fetching data:", error);
             }
-        } catch (error) {
-            console.error("Error fetching current project:", error);
-            setData(bentoItems);
         }
-    }
 
-    async function fetchFindMe() {
-        const res = await fetch("/api/findMe");
-        const response = await res.json();
-
-        if (response.success && response.data) {
-            const event = response.data[0];
-            console.log("Fetched event data:", event);
-            const eventDate = new Date(event.date);
-            const formattedDate = eventDate.toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-            });
-            const updatedItems = bentoItems.map((item) => {
-                if (item.id === "next-at") {
-                    return {
-                        ...item,
-                        title: `${event.type === 'past' ? 'I was last at:' : 'Find me next at:'} ${event.event}`,
-                        description: event.description,
-                        imageSrc: event.imageUrl,
-                        subtitle: `${formattedDate} • ${event.location}`,
-                        href: event.eventUrl,
-                    };
-                }
-                return item;
-            });
-            setData(updatedItems);
-        }
-    }
-
-    useEffect(() => {
-        fetchCurrentProject();
-        fetchFindMe();
-    }, [setData]);
+        fetchData();
+    }, []);
 
     return (
         <div className="dark">
