@@ -46,17 +46,17 @@ interface BentoItem {
     icons?: boolean;
     href?: string;
     feature?:
-        | "chart"
-        | "counter"
-        | "code"
-        | "timeline"
-        | "spotlight"
-        | "icons"
-        | "typing"
-        | "metrics"
-        | "heatmap"
-        | "skills"
-        | "event";
+    | "chart"
+    | "counter"
+    | "code"
+    | "timeline"
+    | "spotlight"
+    | "icons"
+    | "typing"
+    | "metrics"
+    | "heatmap"
+    | "skills"
+    | "event";
     spotlightItems?: string[];
     timeline?: Array<{ year: string; event: string }>;
     code?: string;
@@ -552,9 +552,9 @@ function AIInput_Voice() {
                             style={
                                 submitted && isClient
                                     ? {
-                                          height: `${20 + Math.random() * 80}%`,
-                                          animationDelay: `${i * 0.05}s`,
-                                      }
+                                        height: `${20 + Math.random() * 80}%`,
+                                        animationDelay: `${i * 0.05}s`,
+                                    }
                                     : undefined
                             }
                         />
@@ -743,49 +743,114 @@ const BentoCard = ({ item }: { item: BentoItem }) => {
 };
 
 export default function BentoGrid() {
+    const [data, setData] = useState<BentoItem[]>(bentoItems);
+
+    async function fetchCurrentProject() {
+        try {
+            const res = await fetch("/api/currentProject");
+            const response = await res.json();
+
+            if (response.success && response.data) {
+                const project = response.data;
+                const updatedItems = bentoItems.map((item) => {
+                    if (item.id === "current-project") {
+                        return {
+                            ...item,
+                            title: `Current project: ${project.title}`,
+                            description: project.description,
+                            spotlightItems: project.points,
+                        };
+                    }
+                    return item;
+                });
+                setData(updatedItems);
+            }
+        } catch (error) {
+            console.error("Error fetching current project:", error);
+            setData(bentoItems);
+        }
+    }
+
+    async function fetchFindMe() {
+        const res = await fetch("/api/findMe");
+        const response = await res.json();
+
+
+
+        if (response.success && response.data) {
+            const event = response.data[0];
+            console.log("Fetched event data:", event);
+            const eventDate = new Date(event.date);
+            const formattedDate = eventDate.toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+            });
+            const updatedItems = bentoItems.map((item) => {
+                if (item.id === "next-at") {
+                    return {
+                        ...item,
+                        title: `${event.type === 'past' ? 'I was last at:' : 'Find me next at:'} ${event.event}`,
+                        description: event.description,
+                        imageSrc: event.imageUrl,
+                        subtitle: `${formattedDate} • ${event.location}`,
+                        href: event.eventUrl,
+                    };
+                }
+                return item;
+            });
+            setData(updatedItems);
+        }
+    }
+
+    useEffect(() => {
+        fetchCurrentProject();
+        fetchFindMe();
+    }, []);
+
     return (
         <div className="dark">
-        <section className="relative py-24 sm:py-32 overflow-hidden">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                {/* Bento Grid */}
-                <motion.div
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true }}
-                    variants={staggerContainer}
-                    className="grid gap-6"
-                >
-                    <div className="grid md:grid-cols-3 gap-6">
-                        <motion.div
-                            variants={fadeInUp}
-                            className="md:col-span-1"
-                        >
-                            <BentoCard item={bentoItems[0]} />
-                        </motion.div>
-                        <motion.div
-                            variants={fadeInUp}
-                            className="md:col-span-2"
-                        >
-                            <BentoCard item={bentoItems[1]} />
-                        </motion.div>
-                    </div>
-                    <div className="grid md:grid-cols-2 gap-6">
-                        <motion.div
-                            variants={fadeInUp}
-                            className="md:col-span-1"
-                        >
-                            <BentoCard item={bentoItems[2]} />
-                        </motion.div>
-                        <motion.div
-                            variants={fadeInUp}
-                            className="md:col-span-1"
-                        >
-                            <BentoCard item={bentoItems[3]} />
-                        </motion.div>
-                    </div>
-                </motion.div>
-            </div>
-        </section>
+            <section className="relative py-24 sm:py-32 overflow-hidden">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    {/* Bento Grid */}
+                    <motion.div
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true }}
+                        variants={staggerContainer}
+                        className="grid gap-6"
+                    >
+                        <div className="grid md:grid-cols-3 gap-6">
+                            <motion.div
+                                variants={fadeInUp}
+                                className="md:col-span-1"
+                            >
+                                <BentoCard item={data[0]} />
+                            </motion.div>
+                            <motion.div
+                                variants={fadeInUp}
+                                className="md:col-span-2"
+                            >
+                                <BentoCard item={data[1]} />
+                            </motion.div>
+                        </div>
+                        <div className="grid md:grid-cols-2 gap-6">
+                            <motion.div
+                                variants={fadeInUp}
+                                className="md:col-span-1"
+                            >
+                                <BentoCard item={data[2]} />
+                            </motion.div>
+                            <motion.div
+                                variants={fadeInUp}
+                                className="md:col-span-1"
+                            >
+                                <BentoCard item={data[3]} />
+                            </motion.div>
+                        </div>
+                    </motion.div>
+                </div>
+            </section>
         </div>
     );
 }

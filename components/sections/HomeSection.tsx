@@ -97,7 +97,7 @@ const HomeSection: React.FC = () => {
                     <h1 ref={headingRef} className="text-4xl font-semibold leading-tight md:text-6xl opacity-0">
                         Hi, I&apos;m<br /> Prayas Pal
                     </h1>
-                    <h2 className="text-xl md:text-2xl font-medium font-mono text-primary-foreground">
+                    <h2 className="text-xl md:text-2xl font-medium font-mono text-accent-foreground">
                         {typed}
                     </h2>
                     <p ref={paraRef} className="text-base text-neutral-300 md:text-lg opacity-0">

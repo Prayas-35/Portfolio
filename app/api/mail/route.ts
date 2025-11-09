@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer';
 import { NextResponse } from 'next/server';
+import { StatusCodes } from 'http-status-codes';
 
 export async function POST(request: Request) {
   const { name, email, message } = await request.json();
@@ -27,6 +28,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true, message: 'Email sent successfully' });
   } catch (error) {
     console.error('Error sending email:', error);
-    return NextResponse.json({ success: false, message: 'Failed to send email' }, { status: 500 });
+    return NextResponse.json({ success: false, message: 'Failed to send email' }, { status: StatusCodes.INTERNAL_SERVER_ERROR });
   }
 }

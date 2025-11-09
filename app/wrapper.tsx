@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { usePathname } from "next/navigation";
 import ClickSpark from "@/components/ClickSpark";
 import PillNav from "@/components/PillNav";
 import logo from "@/public/logo.png";
@@ -10,6 +11,8 @@ export default function Wrapper({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const pathname = usePathname();
+    const isAdminRoute = pathname?.startsWith("/admin");
     const [active, setActive] = React.useState<string>("#home");
     const activeRef = React.useRef<string>("#home");
     const items = React.useMemo(
@@ -25,7 +28,7 @@ export default function Wrapper({
     );
 
     React.useEffect(() => {
-        if (typeof window === "undefined") return;
+        if (typeof window === "undefined" || isAdminRoute) return;
         const ids = ["home", "about", "experience", "projects", "achievements", "contact"];
         const getActiveByCenter = () => {
             let bestId = ids[0];
@@ -87,23 +90,25 @@ export default function Wrapper({
             window.removeEventListener('resize', onResize);
             window.removeEventListener("hashchange", onHashChange);
         };
-    }, []);
+    }, [isAdminRoute]);
 
     return (
         <>
-            <PillNav
-                logo={logo}
-                logoAlt="Portfolio Logo"
-                items={items}
-                activeHref={active}
-                className=""
-                ease="power3.easeOut"
-                containerBg="rgba(16,18,27,0.55)"
-                accentColor="#B19EEF"
-                pillColor="rgba(255,255,255,0.08)"
-                hoveredPillTextColor="#0B0B0F"
-                pillTextColor="#E5E7EB"
-            />
+            {!isAdminRoute && (
+                <PillNav
+                    logo={logo}
+                    logoAlt="Portfolio Logo"
+                    items={items}
+                    activeHref={active}
+                    className=""
+                    ease="power3.easeOut"
+                    containerBg="rgba(16,18,27,0.55)"
+                    accentColor="#B19EEF"
+                    pillColor="rgba(255,255,255,0.08)"
+                    hoveredPillTextColor="#0B0B0F"
+                    pillTextColor="#E5E7EB"
+                />
+            )}
             <ClickSpark
                 sparkColor="#fff"
                 sparkSize={10}
