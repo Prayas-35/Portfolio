@@ -775,8 +775,6 @@ export default function BentoGrid() {
         const res = await fetch("/api/findMe");
         const response = await res.json();
 
-
-
         if (response.success && response.data) {
             const event = response.data[0];
             console.log("Fetched event data:", event);
@@ -806,7 +804,7 @@ export default function BentoGrid() {
     useEffect(() => {
         fetchCurrentProject();
         fetchFindMe();
-    }, [data, setData, fetchCurrentProject, fetchFindMe]);
+    }, [setData]);
 
     return (
         <div className="dark">
