@@ -806,7 +806,7 @@ export default function BentoGrid() {
     useEffect(() => {
         fetchCurrentProject();
         fetchFindMe();
-    }, []);
+    }, [data, setData, fetchCurrentProject, fetchFindMe]);
 
     return (
         <div className="dark">
