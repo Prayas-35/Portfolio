@@ -1,6 +1,7 @@
 import cloudinary from '@/lib/cloudinary';
+import { NextRequest } from 'next/server';
 
-export interface RequestWithImage extends Request {
+export interface RequestWithImage extends NextRequest {
     imageUrl?: string;
     uploadedImageUrl?: string;
     logoImageUrl?: string;
@@ -10,10 +11,14 @@ export interface RequestWithImage extends Request {
     parsedFormData?: FormData;
 }
 
-export function withImageUpload<T extends (req: RequestWithImage, context: any) => Promise<Response>>(
-    handler: T
+type RouteContext = { params: Promise<Record<string, string | string[]>> };
+
+export function withImageUpload(
+    handler: (req: RequestWithImage, context: RouteContext) => Promise<Response>
 ) {
-    return async (req: RequestWithImage, context: Parameters<T>[1]): Promise<Response> => {
+    return async (req: NextRequest, context: RouteContext): Promise<Response> => {
+        const extendedReq = req as RequestWithImage;
+        
         try {
             const formData = await req.formData();
             const file = formData.get('image') as File | null;
@@ -30,12 +35,12 @@ export function withImageUpload<T extends (req: RequestWithImage, context: any) 
                     folder: 'uploads',
                 });
 
-                req.imageUrl = uploadResult.secure_url;
+                extendedReq.imageUrl = uploadResult.secure_url;
             }
 
-            req.parsedFormData = formData; // Attach formData to request
+            extendedReq.parsedFormData = formData; // Attach formData to request
 
-            return handler(req, context);
+            return handler(extendedReq, context);
         } catch (error) {
             console.error('Cloudinary Upload Error:', error);
             return new Response(JSON.stringify({ error: 'Image upload failed' }), {
@@ -46,10 +51,12 @@ export function withImageUpload<T extends (req: RequestWithImage, context: any) 
     };
 }
 
-export function withSnapShotImageUpload<T extends (req: RequestWithImage, context: any) => Promise<Response>>(
-    handler: T
+export function withSnapShotImageUpload(
+    handler: (req: RequestWithImage, context: RouteContext) => Promise<Response>
 ) {
-    return async (req: RequestWithImage, context: Parameters<T>[1]): Promise<Response> => {
+    return async (req: NextRequest, context: RouteContext): Promise<Response> => {
+        const extendedReq = req as RequestWithImage;
+        
         try {
             const formData = await req.formData();
             const entries = formData.getAll('snapshotImage');
@@ -75,10 +82,10 @@ export function withSnapShotImageUpload<T extends (req: RequestWithImage, contex
             });
 
             const urls = await Promise.all(uploadPromises);
-            req.snapshotImageUrls = urls;
-            req.parsedFormData = formData; // Attach formData to request
+            extendedReq.snapshotImageUrls = urls;
+            extendedReq.parsedFormData = formData; // Attach formData to request
 
-            return handler(req, context);
+            return handler(extendedReq, context);
         } catch (error) {
             console.error('Cloudinary Snapshot Upload Error:', error);
             return new Response(JSON.stringify({ error: 'Snapshot image upload failed' }), {
@@ -87,12 +94,14 @@ export function withSnapShotImageUpload<T extends (req: RequestWithImage, contex
             });
         }
     };
-};
+}
 
-export function withLogoImageUpload<T extends (req: RequestWithImage, context: any) => Promise<Response>>(
-    handler: T
+export function withLogoImageUpload(
+    handler: (req: RequestWithImage, context: RouteContext) => Promise<Response>
 ) {
-    return async (req: RequestWithImage, context: Parameters<T>[1]): Promise<Response> => {
+    return async (req: NextRequest, context: RouteContext): Promise<Response> => {
+        const extendedReq = req as RequestWithImage;
+        
         try {
             const formData = await req.formData();
             const file = formData.get('logoImage') as File | null;
@@ -114,10 +123,10 @@ export function withLogoImageUpload<T extends (req: RequestWithImage, context: a
                 folder: 'logos',
             });
 
-            req.imageUrl = uploadResult.secure_url;
-            req.parsedFormData = formData; // Attach formData to request
+            extendedReq.imageUrl = uploadResult.secure_url;
+            extendedReq.parsedFormData = formData; // Attach formData to request
 
-            return handler(req, context);
+            return handler(extendedReq, context);
         } catch (error) {
             console.error('Cloudinary Logo Upload Error:', error);
             return new Response(JSON.stringify({ error: 'Logo image upload failed' }), {
@@ -126,12 +135,14 @@ export function withLogoImageUpload<T extends (req: RequestWithImage, context: a
             });
         }
     };
-};
+}
 
-export function withThumbnailImageUpload<T extends (req: RequestWithImage, context: any) => Promise<Response>>(
-    handler: T
+export function withThumbnailImageUpload(
+    handler: (req: RequestWithImage, context: RouteContext) => Promise<Response>
 ) {
-    return async (req: RequestWithImage, context: Parameters<T>[1]): Promise<Response> => {
+    return async (req: NextRequest, context: RouteContext): Promise<Response> => {
+        const extendedReq = req as RequestWithImage;
+        
         try {
             const formData = await req.formData();
             const file = formData.get('iconImage') as File | null;
@@ -153,10 +164,10 @@ export function withThumbnailImageUpload<T extends (req: RequestWithImage, conte
                 folder: 'icons',
             });
 
-            req.thumbnailImageUrl = uploadResult.secure_url;
-            req.parsedFormData = formData; // Attach formData to request
+            extendedReq.thumbnailImageUrl = uploadResult.secure_url;
+            extendedReq.parsedFormData = formData; // Attach formData to request
 
-            return handler(req, context);
+            return handler(extendedReq, context);
         } catch (error) {
             console.error('Cloudinary Icon Upload Error:', error);
             return new Response(JSON.stringify({ error: 'Icon image upload failed' }), {
@@ -165,4 +176,4 @@ export function withThumbnailImageUpload<T extends (req: RequestWithImage, conte
             });
         }
     };
-};
+}

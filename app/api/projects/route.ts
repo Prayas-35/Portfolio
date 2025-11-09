@@ -1,5 +1,5 @@
 import { getProjectModel } from "@/lib/models/schema";
-import { withSnapShotImageUpload, withThumbnailImageUpload } from "@/lib/middlewares/imageUpload.middleware";
+import { withSnapShotImageUpload, withThumbnailImageUpload, RequestWithImage } from "@/lib/middlewares/imageUpload.middleware";
 import { NextResponse } from "next/server";
 import { StatusCodes } from "http-status-codes";
 
@@ -17,9 +17,9 @@ export async function GET() {
     }
 }
 
-export async function postHandler(request: any) {
+export async function postHandler(request: RequestWithImage, context: { params: Promise<Record<string, string | string[]>> }) {
     try {
-        const formData = await request.formData();
+        const formData = request.parsedFormData || await request.formData();
         const name = formData.get('name') as string;
         const overview = formData.get('overview') as string;
         const highlights = JSON.parse(formData.get('highlights') as string);
@@ -57,9 +57,9 @@ export async function postHandler(request: any) {
 
 export const POST = withThumbnailImageUpload(withSnapShotImageUpload(postHandler));
 
-export async function putHandler(request: any) {
+export async function putHandler(request: RequestWithImage, context: { params: Promise<Record<string, string | string[]>> }) {
     try {
-        const formData = await request.formData();
+        const formData = request.parsedFormData || await request.formData();
         const id = formData.get('id') as string;
         const name = formData.get('name') as string;
         const overview = formData.get('overview') as string;

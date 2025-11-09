@@ -1,5 +1,5 @@
 import { getFindMeModel } from "@/lib/models/schema";
-import { withImageUpload } from "@/lib/middlewares/imageUpload.middleware";
+import { withImageUpload, RequestWithImage } from "@/lib/middlewares/imageUpload.middleware";
 import { NextResponse } from "next/server";
 import { StatusCodes } from "http-status-codes";
 
@@ -17,7 +17,7 @@ export async function GET() {
     }
 }
 
-export async function postHandler(request: any) {
+export async function postHandler(request: RequestWithImage, context: { params: Promise<Record<string, string | string[]>> }) {
     try {
         const formData = request.parsedFormData || await request.formData();
         const event = formData.get('event') as string;
@@ -43,7 +43,7 @@ export async function postHandler(request: any) {
 
 export const POST = withImageUpload(postHandler);
 
-export async function putHandler(request: any) {
+export async function putHandler(request: RequestWithImage, context: { params: Promise<Record<string, string | string[]>> }) {
     try {
         const formData = request.parsedFormData || await request.formData();
         const id = formData.get('id') as string;
