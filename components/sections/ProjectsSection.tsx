@@ -3,6 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { ExternalLink } from "lucide-react";
 import Carousel from "@/components/ui/carousel";
+import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 // API Project type
 interface ApiProject {
@@ -208,9 +210,9 @@ function ProjectDialogContent({ project }: { project: Project }) {
           <section>
             <h4 className="mb-2 text-base font-semibold">README</h4>
             <div className="prose prose-invert max-w-none">
-              <pre className="whitespace-pre-wrap rounded-md border border-white/10 bg-white/5 p-4 text-sm leading-relaxed">
+              <Markdown remarkPlugins={[remarkGfm]}>
                 {readme}
-              </pre>
+              </Markdown>
             </div>
           </section>
         </div>
