@@ -4,6 +4,7 @@ import Wrapper from "./wrapper";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import Footer from "@/components/sections/Footer";
+import { Analytics } from "@vercel/analytics/next"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,6 +41,7 @@ export default function RootLayout({
         </Wrapper>
         <Footer />
         <Toaster position="top-right" richColors closeButton />
+        <Analytics />
       </body>
     </html>
   );
