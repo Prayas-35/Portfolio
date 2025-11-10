@@ -137,7 +137,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           className="text-left h-full w-full"
           style={{ animationDelay: `${index * 80}ms` }}
         >
-          <Card className="group relative h-full overflow-hidden border border-white/8 bg-linear-to-br from-white/[0.07] via-white/4 to-transparent backdrop-blur-sm transition-all duration-500 hover:-translate-y-2 hover:border-white/20 hover:shadow-2xl hover:shadow-purple-500/10">
+          <Card className="group relative h-full overflow-hidden border border-white/8 bg-linear-to-b from-black/45 to-black/50 backdrop-blur-sm transition-all duration-500 hover:-translate-y-2 hover:border-white/20 hover:shadow-2xl hover:shadow-purple-500/10">
             <CardHeader className="px-0 pt-0">
               <div className="relative overflow-hidden">
                 <img
