@@ -22,11 +22,11 @@ export async function postHandler(request: RequestWithImage, context: { params: 
         const formData = request.parsedFormData || await request.formData();
         const name = formData.get('name') as string;
         const overview = formData.get('overview') as string;
+        const readme = formData.get('readme') as string;
         const highlights = JSON.parse(formData.get('highlights') as string);
         const technologies = JSON.parse(formData.get('technologies') as string);
         const projectLiveUrl = formData.get('projectLiveUrl') as string;
         const projectRepoUrl = formData.get('projectRepoUrl') as string;
-        
         // Get URLs from middleware
         const thumbnailImageUrl = request.thumbnailImageUrl;
         const snapshotImageUrls = request.snapshotImageUrls;
@@ -35,7 +35,8 @@ export async function postHandler(request: RequestWithImage, context: { params: 
 
         const newProject = new Project({ 
             name, 
-            overview, 
+            overview,
+            readme, 
             highlights, 
             technologies, 
             projectLiveUrl, 
@@ -63,6 +64,7 @@ export async function putHandler(request: RequestWithImage, context: { params: P
         const id = formData.get('id') as string;
         const name = formData.get('name') as string;
         const overview = formData.get('overview') as string;
+        const readme = formData.get('readme') as string;
         const highlights = JSON.parse(formData.get('highlights') as string);
         const technologies = JSON.parse(formData.get('technologies') as string);
         const projectLiveUrl = formData.get('projectLiveUrl') as string;
@@ -80,6 +82,7 @@ export async function putHandler(request: RequestWithImage, context: { params: P
 
         project.name = name;
         project.overview = overview;
+        project.readme = readme;
         project.highlights = highlights;
         project.technologies = technologies;
         project.projectLiveUrl = projectLiveUrl;

@@ -118,6 +118,10 @@ export const ProjectSchema = new mongoose.Schema(
             type: String,
             required: true
         },
+        readme: {
+            type: String,
+            required: false
+        },
         highlights: {
             type: [String],
             required: true

@@ -20,7 +20,8 @@ export function withImageUpload(
         const extendedReq = req as RequestWithImage;
         
         try {
-            const formData = await req.formData();
+            // Use parsedFormData if already available from previous middleware
+            const formData = extendedReq.parsedFormData || await req.formData();
             const file = formData.get('image') as File | null;
 
             // Make image optional - if no file, just pass through with formData
@@ -58,7 +59,8 @@ export function withSnapShotImageUpload(
         const extendedReq = req as RequestWithImage;
         
         try {
-            const formData = await req.formData();
+            // Use parsedFormData if already available from previous middleware
+            const formData = extendedReq.parsedFormData || await req.formData();
             const entries = formData.getAll('snapshotImage');
             const files = entries.filter((f): f is File => f instanceof File) as File[];
 
@@ -103,7 +105,8 @@ export function withLogoImageUpload(
         const extendedReq = req as RequestWithImage;
         
         try {
-            const formData = await req.formData();
+            // Use parsedFormData if already available from previous middleware
+            const formData = extendedReq.parsedFormData || await req.formData();
             const file = formData.get('logoImage') as File | null;
 
             if (!file) {
@@ -144,7 +147,8 @@ export function withThumbnailImageUpload(
         const extendedReq = req as RequestWithImage;
         
         try {
-            const formData = await req.formData();
+            // Use parsedFormData if already available from previous middleware
+            const formData = extendedReq.parsedFormData || await req.formData();
             const file = formData.get('iconImage') as File | null;
 
             if (!file) {

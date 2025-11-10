@@ -13,6 +13,7 @@ interface Project {
   _id: string;
   name: string;
   overview: string;
+  readme: string;
   highlights: string[];
   technologies: string[];
   projectLiveUrl: string;
@@ -33,6 +34,7 @@ export default function ProjectsPage() {
   const [formData, setFormData] = useState({
     name: "",
     overview: "",
+    readme: "",
     highlights: "",
     technologies: "",
     projectLiveUrl: "",
@@ -74,6 +76,7 @@ export default function ProjectsPage() {
       // Add basic fields
       formDataToSend.append('name', formData.name);
       formDataToSend.append('overview', formData.overview);
+      formDataToSend.append('readme', formData.readme);
       formDataToSend.append('highlights', JSON.stringify(formData.highlights.split("\n").filter((h) => h.trim())));
       formDataToSend.append('technologies', JSON.stringify(formData.technologies.split(",").map((t) => t.trim()).filter((t) => t)));
       formDataToSend.append('projectLiveUrl', formData.projectLiveUrl);
@@ -135,6 +138,7 @@ export default function ProjectsPage() {
     setFormData({
       name: project.name,
       overview: project.overview,
+      readme: project.readme,
       highlights: project.highlights.join("\n"),
       technologies: project.technologies.join(", "),
       projectLiveUrl: project.projectLiveUrl,
@@ -178,6 +182,7 @@ export default function ProjectsPage() {
     setFormData({
       name: "",
       overview: "",
+      readme: "",
       highlights: "",
       technologies: "",
       projectLiveUrl: "",
@@ -238,6 +243,19 @@ export default function ProjectsPage() {
                   required
                   rows={3}
                   className="w-full rounded-md bg-gray-800 border-gray-700 px-3 py-2 text-white"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="readme">README (Markdown supported) *</Label>
+                <textarea
+                  id="readme"
+                  value={formData.readme}
+                  onChange={(e) => setFormData({ ...formData, readme: e.target.value })}
+                  required
+                  rows={8}
+                  placeholder="# Project Title&#10;&#10;## Description&#10;Write your project README in Markdown format..."
+                  className="w-full rounded-md bg-gray-800 border-gray-700 px-3 py-2 text-white font-mono text-sm"
                 />
               </div>
 
@@ -309,7 +327,7 @@ export default function ProjectsPage() {
                 accept="image/*"
                 multiple={true}
                 currentFiles={formData.snapshotImageUrls}
-                onChange={(files) => setSnapshotFiles(files)}
+                onChange={(files) => setSnapshotFiles((prev) => [...prev, ...files])}
                 onRemove={(index) => {
                   const newUrls = formData.snapshotImageUrls.filter((_, i) => i !== index);
                   setFormData({ ...formData, snapshotImageUrls: newUrls });

@@ -18,10 +18,10 @@ export async function GET() {
 
 export async function POST(request: Request) {
     try {
-        const { company, position, location, startDate, endDate, description, logoUrl } = await request.json();
+        const { company, position, location, startDate, endDate, description, logoUrl, responsibilities } = await request.json();
         const Experience = await getExperienceModel();
 
-        const newExperience = new Experience({ company, position, location, startDate, endDate, description, logoUrl });
+        const newExperience = new Experience({ company, position, location, startDate, endDate, description, logoUrl, responsibilities });
         await newExperience.save();
 
         return NextResponse.json({ success: true, data: newExperience });
@@ -29,6 +29,49 @@ export async function POST(request: Request) {
         console.error("Error creating experience:", error);
         return NextResponse.json(
             { success: false, message: "Failed to create experience" },
+            { status: StatusCodes.INTERNAL_SERVER_ERROR }
+        );
+    }
+}
+
+export async function PUT(request: Request) {
+    try {
+        const { company, position, location, startDate, endDate, description, logoUrl, responsibilities } = await request.json();
+        const url = new URL(request.url);
+        const id = url.searchParams.get("id");
+
+        if (!id) {
+            return NextResponse.json(
+                { success: false, message: "Missing id" },
+                { status: StatusCodes.BAD_REQUEST }
+            );
+        }
+        const Experience = await getExperienceModel();
+        const experience = await Experience.findById(id);
+
+        if (!experience) {
+            return NextResponse.json(
+                { success: false, message: "Experience not found" },
+                { status: StatusCodes.NOT_FOUND }
+            );
+        }
+
+        experience.company = company;
+        experience.position = position;
+        experience.location = location;
+        experience.startDate = startDate;
+        experience.endDate = endDate;
+        experience.description = description;
+        experience.logoUrl = logoUrl;
+        experience.responsibilities = responsibilities;
+
+        await experience.save();
+
+        return NextResponse.json({ success: true, data: experience });
+    } catch (error) {
+        console.error("Error updating experience:", error);
+        return NextResponse.json(
+            { success: false, message: "Failed to update experience" },
             { status: StatusCodes.INTERNAL_SERVER_ERROR }
         );
     }

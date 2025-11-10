@@ -37,22 +37,34 @@ export default function FileUpload({
 
     onChange(files);
 
-    // Create preview URLs
+    // Create preview URLs for multiple files
     if (preview) {
       const urls = files.map((file) => URL.createObjectURL(file));
-      setPreviewUrls(urls);
+      // For multiple files, append to existing previews; for single file, replace
+      if (multiple) {
+        setPreviewUrls((prev) => [...prev, ...urls]);
+      } else {
+        // Clean up old preview URL if replacing
+        if (previewUrls.length > 0) {
+          previewUrls.forEach(url => URL.revokeObjectURL(url));
+        }
+        setPreviewUrls(urls);
+      }
     }
   };
 
   const handleRemoveNew = (index: number) => {
+    // Revoke the object URL to free memory
     if (previewUrls[index]) {
       URL.revokeObjectURL(previewUrls[index]);
     }
+    
+    // Remove from preview URLs
     const newUrls = previewUrls.filter((_, i) => i !== index);
     setPreviewUrls(newUrls);
 
-    // Reset file input
-    if (fileInputRef.current) {
+    // For single file uploads, also reset the file input
+    if (!multiple && fileInputRef.current) {
       fileInputRef.current.value = "";
     }
   };

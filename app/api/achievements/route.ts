@@ -33,3 +33,38 @@ export async function POST(request: Request) {
         );
     }
 }
+
+export async function PUT(request: Request) {
+    try {
+        const { title } = await request.json();
+        const url = new URL(request.url);
+        const id = url.searchParams.get("id");
+
+        if (!id) {
+            return NextResponse.json(
+                { success: false, message: "Missing id" },
+                { status: StatusCodes.BAD_REQUEST }
+            );
+        }
+        const Achievement = await getAchievementModel();
+        const achievement = await Achievement.findById(id);
+
+        if (!achievement) {
+            return NextResponse.json(
+                { success: false, message: "Achievement not found" },
+                { status: StatusCodes.NOT_FOUND }
+            );
+        }
+
+        achievement.title = title;
+        await achievement.save();
+
+        return NextResponse.json({ success: true, data: achievement });
+    } catch (error) {
+        console.error("Error updating achievement:", error);
+        return NextResponse.json(
+            { success: false, message: "Failed to update achievement" },
+            { status: StatusCodes.INTERNAL_SERVER_ERROR }
+        );
+    }
+}
