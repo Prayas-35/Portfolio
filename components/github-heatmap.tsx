@@ -43,25 +43,56 @@ export default function GithubHeatmap({ username, year = "last" }: GithubHeatmap
     useEffect(() => {
         let isMounted = true;
         const controller = new AbortController();
-        setLoading(true);
-        fetch(`https://github-contributions-api.jogruber.de/v4/${user}?y=${year}`, {
-            signal: controller.signal,
-            cache: "force-cache",
-        })
-            .then(async (res) => {
+        const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
+        const cacheKey = `github-contrib-${user}-${year}`;
+
+        const loadData = async () => {
+            try {
+                setLoading(true);
+
+                // 1️⃣ Try to load cached data
+                const cached = localStorage.getItem(cacheKey);
+                const cachedAt = localStorage.getItem(`${cacheKey}-time`);
+
+                if (cached && cachedAt && Date.now() - Number(cachedAt) < CACHE_DURATION) {
+                    // Use cached data
+                    if (!isMounted) return;
+                    setData(JSON.parse(cached));
+                    setError(null);
+                    setLoading(false);
+                    return;
+                }
+
+                // 2️⃣ Otherwise, fetch fresh data
+                const res = await fetch(
+                    `https://github-contributions-api.jogruber.de/v4/${user}?y=${year}`,
+                    {
+                        signal: controller.signal,
+                        cache: "reload", // bypass browser cache, fetch fresh
+                    }
+                );
+
                 if (!res.ok) throw new Error(`Failed to load heatmap: ${res.status}`);
-                return (await res.json()) as ApiResponse;
-            })
-            .then((json) => {
+
+                const json = (await res.json()) as ApiResponse;
+
+                // 3️⃣ Cache new data
+                localStorage.setItem(cacheKey, JSON.stringify(json));
+                localStorage.setItem(`${cacheKey}-time`, Date.now().toString());
+
+                // 4️⃣ Update UI
                 if (!isMounted) return;
                 setData(json);
                 setError(null);
-            })
-            .catch((e: unknown) => {
+            } catch (e: unknown) {
                 if (!isMounted) return;
                 setError(e instanceof Error ? e.message : "Unknown error");
-            })
-            .finally(() => isMounted && setLoading(false));
+            } finally {
+                if (isMounted) setLoading(false);
+            }
+        };
+
+        loadData();
 
         return () => {
             isMounted = false;
