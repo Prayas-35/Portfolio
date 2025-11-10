@@ -68,3 +68,35 @@ export async function PUT(request: Request) {
         );
     }
 }
+
+export async function DELETE(request: Request) {
+    try {
+        const url = new URL(request.url);
+        const id = url.searchParams.get("id");
+
+        if (!id) {
+            return NextResponse.json(
+                { success: false, message: "Missing id" },
+                { status: StatusCodes.BAD_REQUEST }
+            );
+        }
+
+        const Achievement = await getAchievementModel();
+        const deletedAchievement = await Achievement.findByIdAndDelete(id);
+
+        if (!deletedAchievement) {
+            return NextResponse.json(
+                { success: false, message: "Achievement not found" },
+                { status: StatusCodes.NOT_FOUND }
+            );
+        }
+
+        return NextResponse.json({ success: true, data: deletedAchievement });
+    } catch (error) {
+        console.error("Error deleting achievement:", error);
+        return NextResponse.json(
+            { success: false, message: "Failed to delete achievement" },
+            { status: StatusCodes.INTERNAL_SERVER_ERROR }
+        );
+    }
+}
