@@ -29,7 +29,7 @@ export async function POST(request: Request) {
         const newAdminOtp = new AdminOtpModel({ otp });
         await newAdminOtp.save();
 
-        return NextResponse.json({ success: true, data: newAdminOtp });
+        return NextResponse.json({ success: true, message: "OTP sent successfully" });
     } catch (error) {
         console.error("Error creating Admin OTP data:", error);
         return NextResponse.json(

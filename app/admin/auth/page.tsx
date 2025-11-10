@@ -100,7 +100,7 @@ export default function AdminAuthPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black p-4">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-900 via-gray-800 to-black p-4">
       <Card className="w-full max-w-md bg-gray-900/50 backdrop-blur-xl border-gray-800">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center text-white">
