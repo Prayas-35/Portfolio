@@ -785,7 +785,7 @@ export default function BentoGrid() {
 
                         return {
                             ...item,
-                            title: event.type === 'past' ? 'I was last at' : 'Find me next at',
+                            title: event.type === 'past' ? 'I was last present at' : 'Find me next at',
                             description: event.event,
                             imageSrc: event.imageUrl,
                             subtitle: `${formattedDate} • ${event.location}`,
