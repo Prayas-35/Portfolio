@@ -62,7 +62,7 @@ export default function AdminDashboard() {
           <Link key={section.href} href={section.href}>
             <Card className="bg-gray-900/50 backdrop-blur-xl border-gray-800 hover:border-gray-700 transition-all hover:scale-105 cursor-pointer h-full">
               <CardHeader>
-                <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${section.color} flex items-center justify-center text-2xl mb-4`}>
+                <div className={`w-12 h-12 rounded-lg bg-linear-to-br ${section.color} flex items-center justify-center text-2xl mb-4`}>
                   {section.icon}
                 </div>
                 <CardTitle className="text-white">{section.title}</CardTitle>
