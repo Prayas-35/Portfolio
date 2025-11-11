@@ -611,6 +611,7 @@ const BentoCard = ({ item }: { item: BentoItem }) => {
         >
             <Link
                 href={item.href || "#"}
+                target={item.href ? (item.id === "next-at" || item.id === "github-activity" ? "_blank" : undefined) : undefined}
                 className={`
                     group relative flex flex-col gap-4 h-full rounded-xl p-5
                     bg-linear-to-b from-neutral-50/60 via-neutral-50/40 to-neutral-50/30 
