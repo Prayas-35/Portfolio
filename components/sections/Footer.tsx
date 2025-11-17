@@ -7,7 +7,7 @@ export default function Footer() {
   const year = new Date().getFullYear();
   return (
     <footer aria-label="Site footer" className="mt-20 border-t border-white/10">
-      <div className="mx-auto max-w-6xl px-6 py-8">
+      <div className="mx-auto max-w-7xl px-6 py-8">
         <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
           <p className="flex items-center gap-2 text-sm text-muted-foreground">
             <span>© {year}</span>

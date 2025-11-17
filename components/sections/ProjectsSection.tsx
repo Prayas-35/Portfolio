@@ -86,7 +86,7 @@ const ProjectsSection: React.FC = () => {
   if (isLoading) {
     return (
       <section id="projects" className="w-full py-24" aria-label="Projects">
-        <div className="mx-auto max-w-9/12 px-6">
+        <div className="mx-auto max-w-7xl md:max-w-9/12 px-6">
           <h2 className="mb-3 text-3xl font-semibold md:text-4xl">Projects</h2>
           <p className="mb-10 max-w-3xl text-muted-foreground">
             Loading projects...
@@ -103,7 +103,7 @@ const ProjectsSection: React.FC = () => {
 
   return (
     <section id="projects" className="w-full py-24" aria-label="Projects">
-      <div className="mx-auto max-w-9/12 px-6">
+      <div className="mx-auto max-w-7xl md:max-w-9/12 px-6">
         <h2 className="mb-3 text-3xl font-semibold md:text-4xl">Projects</h2>
         <p className="mb-10 max-w-3xl text-muted-foreground">
           A selection of recent work. Click a card to see more details.

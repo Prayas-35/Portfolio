@@ -9,7 +9,7 @@ const ContactSection: React.FC = () => {
 
   return (
     <section id="contact" className="w-full py-24" aria-label="Contact">
-      <div className="mx-auto max-w-9/12 px-6">
+      <div className="mx-auto max-w-7xl md:max-w-9/12 px-6">
         <div className="grid gap-10 md:grid-cols-2">
           {/* Left: intro + socials */}
           <div>

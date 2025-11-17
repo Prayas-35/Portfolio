@@ -56,7 +56,7 @@ const ExperienceSection: React.FC = () => {
 
   return (
     <section id="experience" className="w-full py-24" aria-label="Experience">
-      <div className="mx-auto max-w-9/12 px-6">
+      <div className="mx-auto max-w-7xl md:max-w-9/12 px-6">
         <h2 className="mb-8 text-3xl font-semibold md:text-4xl">Experience</h2>
         <div className="dark">
           {loading ? (

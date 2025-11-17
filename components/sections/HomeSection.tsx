@@ -1,6 +1,4 @@
-"use client";
-
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import { gsap } from "gsap";
 import PixelBlast from "@/components/PixelBlast";
 import { PixelatedCanvas } from "@/components/ui/pixelated-canvas";
@@ -10,6 +8,14 @@ const HomeSection: React.FC = () => {
     const paraRef = React.useRef<HTMLParagraphElement | null>(null);
     const fullSubheading = "Web3 smart contract and full stack developer";
     const [typed, setTyped] = React.useState<string>("");
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     useEffect(() => {
         // typewriter for subheading
@@ -23,24 +29,6 @@ const HomeSection: React.FC = () => {
             setTyped(fullSubheading.slice(0, i));
         }, 35);
         return () => window.clearInterval(id);
-    }, []);
-
-    useEffect(() => {
-        // entrance animations
-        if (headingRef.current) {
-            gsap.fromTo(
-                headingRef.current,
-                { opacity: 0, y: 14 },
-                { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", delay: 0.1 }
-            );
-        }
-        if (paraRef.current) {
-            gsap.fromTo(
-                paraRef.current,
-                { opacity: 0, y: 12 },
-                { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", delay: 0.4 }
-            );
-        }
     }, []);
 
     useEffect(() => {
@@ -91,7 +79,7 @@ const HomeSection: React.FC = () => {
             </div>
 
             {/* Foreground content */}
-            <div className="relative mx-auto grid min-h-screen w-full max-w-9/12 grid-cols-1 items-center gap-10 px-6 py-20 md:grid-cols-2">
+            <div className="relative mx-auto grid min-h-screen w-full max-w-7xl md:max-w-9/12 grid-cols-1 items-center gap-10 px-6 py-20 md:grid-cols-2">
                 {/* Left: Intro copy */}
                 <div className="space-y-6">
                     <h1 ref={headingRef} className="text-4xl font-semibold leading-tight md:text-6xl opacity-0">
@@ -108,11 +96,11 @@ const HomeSection: React.FC = () => {
 
                 {/* Right: Pixelated portrait */}
                 <div className="flex w-full items-center justify-center">
-                    <div className="rounded-xl shadow-lg backdrop-blur-sm">
+                    <div className="rounded-xl shadow-lg backdrop-blur-sm px-4 md:px-0">
                         <PixelatedCanvas
                             src="profile.png"
-                            width={400}
-                            height={500}
+                            width={isMobile ? 300 : 400}
+                            height={isMobile ? 400 : 500}
                             cellSize={3}
                             dotScale={0.9}
                             shape="square"

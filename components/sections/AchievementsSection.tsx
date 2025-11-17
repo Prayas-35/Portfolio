@@ -34,7 +34,7 @@ const AchievementsSection: React.FC = () => {
   return (
     <div className="dark">
       <section id="achievements" className="w-full py-24" aria-label="Achievements">
-        <div className="mx-auto max-w-9/12 px-6">
+        <div className="mx-auto max-w-7xl md:max-w-9/12 px-6">
           <h2 className="mb-3 text-3xl font-semibold md:text-4xl">Achievements</h2>
           <p className="mb-10 max-w-3xl text-sm text-muted-foreground md:text-base">
             A snapshot of awards, hackathon results, and recognitions.
