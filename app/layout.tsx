@@ -4,7 +4,8 @@ import Wrapper from "./wrapper";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import Footer from "@/components/sections/Footer";
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,6 +43,7 @@ export default function RootLayout({
         <Footer />
         <Toaster position="top-right" richColors closeButton />
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
