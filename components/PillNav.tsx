@@ -255,10 +255,38 @@ const PillNav: React.FC<PillNavProps> = ({
     ['--pill-gap']: '3px'
   } as React.CSSProperties;
 
+  const closeMobileMenu = () => {
+    if (isMobileMenuOpen) {
+      setIsMobileMenuOpen(false);
+      const hamburger = hamburgerRef.current;
+      const menu = mobileMenuRef.current;
+
+      if (hamburger) {
+        const lines = hamburger.querySelectorAll('.hamburger-line');
+        gsap.to(lines[0], { rotation: 0, y: 0, duration: 0.3, ease });
+        gsap.to(lines[1], { rotation: 0, y: 0, duration: 0.3, ease });
+      }
+
+      if (menu) {
+        gsap.to(menu, {
+          opacity: 0,
+          y: 10,
+          scaleY: 1,
+          duration: 0.2,
+          ease,
+          transformOrigin: 'top center',
+          onComplete: () => {
+            gsap.set(menu, { visibility: 'hidden' });
+          }
+        });
+      }
+    }
+  };
+
   return (
-  <div className="fixed top-4 left-1/2 -translate-x-1/2 z-1000 w-max max-w-[92vw]">
+    <div className="fixed top-4 left-1/2 -translate-x-1/2 z-1000 w-[calc(100vw-2rem)] max-w-[92vw] md:w-max">
       <nav
-        className={`w-full md:w-max flex items-center justify-between md:justify-start box-border px-4 md:px-0 rounded-full backdrop-blur-md shadow-lg ring-1 ring-white/10 ${className}`}
+        className={`w-full md:w-max flex items-center justify-between md:justify-start box-border px-3 py-1 md:px-0 md:py-0 rounded-full backdrop-blur-md shadow-lg ring-1 ring-white/10 ${className}`}
         aria-label="Primary"
         style={cssVars}
       >
@@ -271,7 +299,8 @@ const PillNav: React.FC<PillNavProps> = ({
             ref={el => {
               logoRef.current = el;
             }}
-            className="rounded-full p-2 inline-flex items-center justify-center overflow-hidden"
+            onClick={closeMobileMenu}
+            className="rounded-full p-2 inline-flex items-center justify-center overflow-hidden flex-shrink-0"
             style={{
               width: 'var(--nav-h)',
               height: 'var(--nav-h)',
@@ -288,7 +317,8 @@ const PillNav: React.FC<PillNavProps> = ({
             ref={el => {
               logoRef.current = el;
             }}
-            className="rounded-full p-2 inline-flex items-center justify-center overflow-hidden"
+            onClick={closeMobileMenu}
+            className="rounded-full p-2 inline-flex items-center justify-center overflow-hidden flex-shrink-0"
             style={{
               width: 'var(--nav-h)',
               height: 'var(--nav-h)',
@@ -404,7 +434,7 @@ const PillNav: React.FC<PillNavProps> = ({
           onClick={toggleMobileMenu}
           aria-label="Toggle menu"
           aria-expanded={isMobileMenuOpen}
-          className="md:hidden rounded-full border-0 flex flex-col items-center justify-center gap-1 cursor-pointer p-0 relative"
+          className="md:hidden rounded-full border-0 flex flex-col items-center justify-center gap-1 cursor-pointer p-0 relative flex-shrink-0"
           style={{
             width: 'var(--nav-h)',
             height: 'var(--nav-h)',
@@ -424,7 +454,7 @@ const PillNav: React.FC<PillNavProps> = ({
 
       <div
         ref={mobileMenuRef}
-        className="md:hidden absolute top-[3em] left-4 right-4 rounded-[27px] shadow-[0_8px_32px_rgba(0,0,0,0.12)] z-998 origin-top"
+        className="md:hidden absolute top-[3em] left-0 right-0 rounded-[27px] shadow-[0_8px_32px_rgba(0,0,0,0.12)] z-998 origin-top overflow-hidden"
         style={{
           ...cssVars,
           background: 'var(--container, #0a0a0a)'
@@ -446,7 +476,7 @@ const PillNav: React.FC<PillNavProps> = ({
             };
 
             const linkClasses =
-              'block py-3 px-4 text-[16px] font-medium rounded-[50px] transition-all duration-200 ease-[cubic-bezier(0.25,0.1,0.25,1)]';
+              'block py-3 px-4 text-[14px] sm:text-[16px] font-medium rounded-[50px] transition-all duration-200 ease-[cubic-bezier(0.25,0.1,0.25,1)] truncate';
 
             return (
               <li key={item.href}>
@@ -457,7 +487,7 @@ const PillNav: React.FC<PillNavProps> = ({
                     style={defaultStyle}
                     onMouseEnter={hoverIn}
                     onMouseLeave={hoverOut}
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    onClick={closeMobileMenu}
                   >
                     {item.label}
                   </Link>
@@ -468,7 +498,7 @@ const PillNav: React.FC<PillNavProps> = ({
                     style={defaultStyle}
                     onMouseEnter={hoverIn}
                     onMouseLeave={hoverOut}
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    onClick={closeMobileMenu}
                   >
                     {item.label}
                   </a>
