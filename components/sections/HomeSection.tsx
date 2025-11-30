@@ -1,11 +1,13 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { gsap } from "gsap";
 import PixelBlast from "@/components/PixelBlast";
 import { PixelatedCanvas } from "@/components/ui/pixelated-canvas";
+import { FileText } from "lucide-react";
 
 const HomeSection: React.FC = () => {
     const headingRef = React.useRef<HTMLHeadingElement | null>(null);
     const paraRef = React.useRef<HTMLParagraphElement | null>(null);
+    const resumeBtnRef = React.useRef<HTMLAnchorElement | null>(null);
     const fullSubheading = "Web3 smart contract and full stack developer";
     const [typed, setTyped] = React.useState<string>("");
     const [isMobile, setIsMobile] = useState(false);
@@ -45,6 +47,13 @@ const HomeSection: React.FC = () => {
                 paraRef.current,
                 { opacity: 0, y: 12 },
                 { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", delay: 0.4 }
+            );
+        }
+        if (resumeBtnRef.current) {
+            gsap.fromTo(
+                resumeBtnRef.current,
+                { opacity: 0, y: 12, scale: 0.9 },
+                { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "power3.out", delay: 0.6 }
             );
         }
     }, []);
@@ -89,9 +98,51 @@ const HomeSection: React.FC = () => {
                         {typed}
                     </h2>
                     <p ref={paraRef} className="text-base text-neutral-300 md:text-lg opacity-0">
-                        A backend-focused full-stack developer with experience in AI integration and Web3 architecture. 
+                        A backend-focused full-stack developer with experience in AI integration and Web3 architecture.
                         I build the infrastructure for intelligent, decentralized systems.
                     </p>
+                    <a
+                        ref={resumeBtnRef}
+                        href="https://prayas35.tiiny.site"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group relative inline-flex items-center gap-2 px-8 py-3.5 rounded-full 
+                                    text-white font-medium text-base md:text-lg
+                                    border border-white/30 
+                                    backdrop-blur-2xl backdrop-saturate-150 
+                                     
+                                    transition-all duration-300 
+                                    hover:bg-white/20 hover:border-white/50 active:scale-95 opacity-0 shadow-[0_0_25px_rgba(255,255,255,0.08)]"
+                    >
+                        {/* Glass shine highlight */}
+                        <span className="absolute inset-0 rounded-full
+                        bg-linear-to-b from-white/20 to-transparent opacity-20
+                        pointer-events-none" />
+
+                        <span className="relative flex items-center gap-2 z-2">
+                            <FileText className="h-5 w-5 md:h-6 md:w-6 transition-transform duration-300 group-hover:rotate-6" />
+                            View Resume
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                                />
+                            </svg>
+                        </span>
+
+                        {/* Subtle glow on hover */}
+                        <span className="absolute inset-0 rounded-full bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                    </a>
+
+
                 </div>
 
                 {/* Right: Pixelated portrait */}
