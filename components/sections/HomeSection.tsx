@@ -103,7 +103,7 @@ const HomeSection: React.FC = () => {
                     </p>
                     <a
                         ref={resumeBtnRef}
-                        href="https://prayas35.tiiny.site"
+                        href="https://prayaspal.tiiny.site"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="group relative inline-flex items-center gap-2 px-8 py-3.5 rounded-full 
